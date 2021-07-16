@@ -1,0 +1,29 @@
+<div id="tripetto"></div>
+<script src="https://unpkg.com/tripetto-runner-foundation"></script>
+<script src="https://unpkg.com/tripetto-runner-autoscroll"></script>
+<script src="https://unpkg.com/tripetto-services"></script>
+<script>
+var tripetto = TripettoServices.init({ token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiaC9ueWJkOVVwU3RRcUZLQ0JITklTaG5HZ0YxaDBIZjhMTXBKM3krNlNNRT0iLCJkZWZpbml0aW9uIjoiMHM2TVE4N01SckgyQkRWRjRsVmdtOGVPVjBRN3lsVDhnZXJNYzZVTzMzST0iLCJ0eXBlIjoiY29sbGVjdCJ9.Yc6A8ADOCHjWr53tOXZ7JPZPyGFY-i1oE-Racl_eRoM" });
+
+TripettoAutoscroll.run({
+    element: document.getElementById("tripetto"),
+    definition: tripetto.definition,
+    styles: tripetto.styles,
+    l10n: tripetto.l10n,
+    locale: tripetto.locale,
+    translations: tripetto.translations,
+    onSubmit: function(instance) {
+        var csv = TripettoRunner.Export.CSV(instance);
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:5000/process",
+            data: { 
+                'param1' : csv.record, 
+                'param2' : csv.fields
+            }
+        }).done(function(data){
+            console.log(data);
+        });
+    }
+});
+</script>
